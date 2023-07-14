@@ -1,6 +1,4 @@
 <script lang="ts">
-	import CaptifyLogo from "~icons/game-icons/abstract-116";
-	import PhArrowCircleUpRightFill from "~icons/ph/arrow-circle-up-right-fill";
 	import FluentEmojiHighContrastMagicWand from "~icons/fluent-emoji-high-contrast/magic-wand";
 
 	import * as THREE from "three";
@@ -8,6 +6,8 @@
 	import CLOUDS from "vanta/dist/vanta.clouds.min";
 	import Footer from "../components/Footer.svelte";
 	import SigninModal from "../components/SigninModal.svelte";
+	import LandingNav from "../components/LandingNav.svelte";
+	import type { PageData } from "./$types";
 
 	function vanta(node: HTMLElement) {
 		CLOUDS({
@@ -21,6 +21,16 @@
 	}
 
 	let modal: SigninModal;
+
+	export let data: PageData;
+
+	function showSigninModal() {
+		if (data.session) {
+			window.location.href = "/dashboard";
+		} else {
+			modal.show();
+		}
+	}
 </script>
 
 <main
@@ -32,32 +42,7 @@
 		class="absolute top-0 flex w-full md:w-1/2 h-2/3 md:h-4/5 right-0 -z-[1]"
 	/>
 	<div class="container lg:px-32">
-		<nav class="flex flex-col md:flex-row w-full justify-between items-center py-4 md:py-6 gap-4">
-			<a
-				href="/"
-				class="flex items-center gap-2 text-3xl md:text-4xl font-bold hover:-rotate-2 hover:scale-105 transition"
-			>
-				<CaptifyLogo class="w-10 h-10" />
-				Captify
-			</a>
-			<div
-				id="nav-as"
-				class="flex w-full md:w-auto items-center justify-evenly md:justify-center md:gap-10 text-lg md:text-xl font-medium"
-			>
-				<a href="/" class="hover:font-bold hover:-translate-y-1 transition">/Home</a>
-				<a href="#/features" class="hover:font-bold hover:-translate-y-1 transition">/Features</a>
-				<a href="#/TOS" class="hover:font-bold hover:-translate-y-1 transition">/TOS</a>
-			</div>
-			<div id="nav-buttons">
-				<button
-					class="flex items-center gap-2 text-lg md:text-xl font-semibold md:font-bold border-2 border-light-text rounded-full hover:shadow-sm hover:shadow-light-text hover:-translate-y-1 transition"
-					on:click={modal.show}
-				>
-					<span class="ml-2">Get Started</span>
-					<PhArrowCircleUpRightFill class="w-8 h-8 md:w-10 md:h-10" />
-				</button>
-			</div>
-		</nav>
+		<LandingNav ctaClicked={showSigninModal} {data} />
 		<div class="flex flex-col w-full h-1/2 md:justify-center mt-10 items-center md:items-start">
 			<p
 				class="text-4xl md:text-6xl leading-snug md:leading-normal font-semibold text-center md:text-start"
@@ -73,7 +58,7 @@
 				<div class="flex w-full md:w-auto justify-center items-center">
 					<button
 						class="flex gap-2 p-2 text-xl group bg-light-text text-light rounded-lg font-bold hover:shadow-md hover:shadow-light-text hover:outline hover:outline-light-accent hover:-translate-y-1 transition"
-						on:click={modal.show}
+						on:click={showSigninModal}
 					>
 						Start Creating
 						<FluentEmojiHighContrastMagicWand class="group-hover:rotate-90 transition" />

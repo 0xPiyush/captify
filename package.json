@@ -33,6 +33,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@supabase/auth-helpers-sveltekit": "^0.9.4",
+		"@supabase/supabase-js": "^2.21.0",
+		"openai": "^3.2.1",
 		"three": "0.122.0",
 		"unplugin-icons": "^0.16.1",
 		"vanta": "^0.5.24"

@@ -4,6 +4,9 @@
 	import LogosGoogleIcon from "~icons/logos/google-icon";
 	import LogosDiscordIcon from "~icons/logos/discord-icon";
 	import Spinner from "~icons/svg-spinners/270-ring";
+	import type { Provider } from "@supabase/supabase-js";
+	import { supabaseClient } from "../lib/supabaseClient";
+	import { enhance, type SubmitFunction } from "$app/forms";
 
 	let modal: Modal;
 
@@ -19,7 +22,7 @@
 		modal.hide();
 	}
 
-	function handleGoogleSignIn() {
+	function animateGoogleButton() {
 		disabled = true;
 		googleSigninInProgress = true;
 		// Emulate a delay
@@ -29,7 +32,7 @@
 		}, 3000);
 	}
 
-	function handleDiscordSignIn() {
+	function animateDiscordButton() {
 		disabled = true;
 		discordSigninInProgress = true;
 		// Emulate a delay
@@ -38,6 +41,24 @@
 			discordSigninInProgress = false;
 		}, 3000);
 	}
+
+	async function signInWithProvider(provider: Provider) {
+		const { data, error } = await supabaseClient.auth.signInWithOAuth({ provider: provider });
+	}
+
+	const submitSocialSignin: SubmitFunction = async ({ action, cancel }) => {
+		switch (action.searchParams.get("provider")) {
+			case "google":
+				await signInWithProvider("google");
+				break;
+			case "discord":
+				await signInWithProvider("discord");
+				break;
+			default:
+				break;
+		}
+		cancel();
+	};
 
 	export let blur = false;
 </script>
@@ -55,9 +76,14 @@
 				>
 			</div>
 			<!-- Modal Body -->
-			<div class="flex flex-col w-auto justify-center items-center py-4 gap-4">
+			<form
+				method="POST"
+				use:enhance={submitSocialSignin}
+				class="flex flex-col w-auto justify-center items-center py-4 gap-4"
+			>
 				<!-- Sign in buttons -->
 				<button
+					formaction="?/signin&provider=google"
 					class="flex items-center w-full gap-2 text-md font-medium px-4 py-2 bg-light-text text-light rounded-md
                         {!disabled ? 'hover:outline' : 'hover:outline-none'} 
                         {!disabled ? 'hover:outline-light-accent' : ''}
@@ -66,7 +92,7 @@
                         disabled:bg-light-text-secondary
                     transition"
 					{disabled}
-					on:click={handleGoogleSignIn}
+					on:click={animateGoogleButton}
 				>
 					{#if googleSigninInProgress}
 						<Spinner />
@@ -77,6 +103,7 @@
 					{/if}
 				</button>
 				<button
+					formaction="?/signin&provider=discord"
 					class="flex items-center w-full gap-2 text-md font-medium px-4 py-2 bg-light-text text-light rounded-md
                         {!disabled ? 'hover:outline' : 'hover:outline-none'} 
                         {!disabled ? 'hover:outline-light-accent' : ''}
@@ -85,7 +112,7 @@
                         disabled:bg-light-text-secondary
                         transition"
 					{disabled}
-					on:click={handleDiscordSignIn}
+					on:click={animateDiscordButton}
 				>
 					{#if discordSigninInProgress}
 						<Spinner />
@@ -95,7 +122,7 @@
 						Continue with Discord
 					{/if}
 				</button>
-			</div>
+			</form>
 		</div>
 	</slot>
 </Modal>

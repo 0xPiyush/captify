@@ -13,7 +13,8 @@
 			<span class="text-3xl font-bold">Captify</span>
 		</a>
 		<p class="text-base sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-600 sm:py-2 sm:mt-0 mt-4">
-			© 2023 Captify — <span>Piyush Sharma & Nitish Kapoor</span>
+			<!-- © 2023 Captify — <span>Piyush Sharma & Nitish Kapoor</span> -->
+			© 2023 Captify — <span>HARISHWA, RITHVIK, PRATAP, SAI PRATEEK</span>
 		</p>
 		<span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
 			<a href="/#">
